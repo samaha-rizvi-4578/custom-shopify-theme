@@ -1,0 +1,154 @@
+{% comment %} sections/category-hub.liquid {% endcomment %}
+
+<div class="category-hub-wrapper">
+  <div class="category-hub-container">
+    
+    {% comment %} Center Logo {% endcomment %}
+    <div class="hub-center-logo">
+      {% if section.settings.center_logo != blank %}
+        <img src="{{ section.settings.center_logo | image_url: width: 300 }}" alt="{{ shop.name }}" loading="lazy">
+      {% else %}
+        <h2>{{ shop.name }}</h2>
+      {% endif %}
+    </div>
+
+    {% comment %} Surrounding Category Cards {% endcomment %}
+    <div class="hub-categories-grid">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.category_link }}" class="hub-category-card" {{ block.shopify_attributes }}>
+          <div class="category-image-wrapper">
+            {% if block.settings.category_image != blank %}
+              <img src="{{ block.settings.category_image | image_url: width: 400 }}" alt="{{ block.settings.category_title }}" loading="lazy">
+            {% else %}
+              <div class="placeholder-image">Category</div>
+            {% endif %}
+          </div>
+          <span class="category-title">{{ block.settings.category_title }}</span>
+        </a>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+<style>
+.category-hub-wrapper {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.category-hub-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.hub-center-logo img {
+  max-width: 220px;
+  height: auto;
+  display: block;
+}
+
+.hub-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.hub-category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease;
+}
+
+.hub-category-card:hover {
+  transform: translateY(-6px);
+}
+
+.category-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%; /* Makes image circles (optional) */
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.category-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-title {
+  margin-top: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Optional Radial Layout for Large Screens */
+@media (min-width: 992px) {
+  .category-hub-container {
+    position: relative;
+    min-height: 550px;
+    justify-content: center;
+  }
+
+  .hub-center-logo {
+    z-index: 2;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Category Hub Landing",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "center_logo",
+      "label": "Center Logo"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "category_image",
+          "label": "Category Image"
+        },
+        {
+          "type": "text",
+          "id": "category_title",
+          "label": "Category Title",
+          "default": "Halloween"
+        },
+        {
+          "type": "url",
+          "id": "category_link",
+          "label": "Category Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Hub Landing",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}
